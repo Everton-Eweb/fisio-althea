@@ -1,0 +1,82 @@
+/* ==================================================
+   AJUSTES GERAIS DE RESPONSIVIDADE
+   ================================================== */
+
+/*
+    Faz padding e bordas entrarem no cálculo
+    da largura dos elementos.
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/*
+    Impede que elementos maiores criem
+    uma faixa lateral e rolagem horizontal.
+*/
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+
+    margin: 0;
+
+    overflow-x: clip;
+}
+
+/*
+    Evita que imagens ultrapassem
+    a largura disponível.
+*/
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/*
+    Aplica uma rolagem suave quando o usuário clica
+    nos links do menu que apontam para seções da página.
+*/
+html {
+    scroll-behavior: smooth;
+}
+
+/*
+    Alturas utilizadas para calcular a primeira tela do site.
+
+    180px: área do logotipo
+    58px: barra do menu
+*/
+:root {
+    --altura-logo: 120px;
+    --altura-menu: 58px;
+}
+
+body {
+    background-color: #f3eee8;
+    color: #3f432a;
+}
+
+h1 {
+    color: #3f432a;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+p {
+    color: #625f55;
+}
+
+.btn-althea {
+    background-color: #b75b3b;
+    color: #ffffff;
+    border: 1px solid #b75b3b;
+}
+
+.btn-althea:hover,
+.btn-althea:focus {
+    background-color: #93472f;
+    color: #ffffff;
+    border-color: #93472f;
+}

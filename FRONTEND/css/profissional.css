@@ -1,0 +1,286 @@
+/* ==================================================
+   SEÇÃO DA PROFISSIONAL
+   ================================================== */
+
+/*
+    Área responsável pela apresentação
+    da profissional da clínica.
+*/
+.secao-profissionais {
+    width: 100%;
+    max-width: 100%;
+
+    border-top:
+        1px solid rgba(63, 67, 42, 0.15);
+
+    /*
+        Cria um espaço ao acessar esta seção
+        pelos links do menu.
+    */
+    scroll-margin-top: 2rem;
+}
+
+
+/*
+    Título principal da seção.
+*/
+.secao-profissionais h2 {
+    color: #3f432a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.2;
+}
+
+
+/*
+    Texto introdutório da seção.
+*/
+.secao-profissionais > .text-center p {
+    max-width: 680px;
+
+    margin-right: auto;
+    margin-left: auto;
+
+    color: #625f55;
+
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   CARD DA PROFISSIONAL
+   ================================================== */
+
+/*
+    Aparência geral do card.
+*/
+.card-profissional {
+    overflow: hidden;
+
+    background-color: #fffaf5;
+
+    border: none;
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 16px rgba(63, 67, 42, 0.16);
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/*
+    Pequeno destaque ao passar o mouse
+    sobre o card.
+*/
+.card-profissional:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 16px 34px rgba(63, 67, 42, 0.24);
+}
+
+
+/*
+    Organiza o conteúdo interno do card.
+*/
+.card-profissional .card-body {
+    padding: 2rem;
+}
+
+
+/*
+    Nome da profissional.
+*/
+.card-profissional h3 {
+    margin-bottom: 0.4rem;
+
+    color: #3f432a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: 700;
+}
+
+
+/*
+    Descrição apresentada no card.
+*/
+.card-profissional p {
+    color: #625f55;
+
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   FOTOGRAFIA DA PROFISSIONAL
+   ================================================== */
+
+/*
+    Fotografia circular apresentada no card.
+*/
+.foto-profissional {
+    width: 150px;
+    height: 150px;
+
+    /*
+        A imagem preenche o círculo sem deformar.
+    */
+    object-fit: cover;
+    object-position: center;
+
+    display: block;
+
+    border:
+        4px solid #f3eee8;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 5px 16px rgba(63, 67, 42, 0.22);
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/*
+    Pequeno destaque na fotografia
+    quando o card recebe o mouse.
+*/
+.card-profissional:hover .foto-profissional {
+    transform: scale(1.03);
+
+    box-shadow:
+        0 8px 22px rgba(63, 67, 42, 0.28);
+}
+
+
+/* ==================================================
+   CARGO DA PROFISSIONAL
+   ================================================== */
+
+/*
+    Destaque para a função profissional.
+*/
+.cargo-profissional {
+    margin-bottom: 1rem;
+
+    color: #b75b3b !important;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    letter-spacing: 0.04rem;
+}
+
+
+/* ==================================================
+   FOCO PELO TECLADO
+   ================================================== */
+
+/*
+    Destaca o card quando algum link ou botão
+    interno recebe foco pela tecla Tab.
+*/
+.card-profissional:focus-within {
+    outline:
+        3px solid #b75b3b;
+
+    outline-offset: 5px;
+}
+
+
+/* ==================================================
+   AJUSTES PARA TABLET
+   ================================================== */
+
+@media (
+    min-width: 768px
+) and (
+    max-width: 991.98px
+) {
+
+    .card-profissional .card-body {
+        padding: 1.75rem;
+    }
+
+    .foto-profissional {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+
+/* ==================================================
+   AJUSTES PARA CELULAR
+   ================================================== */
+
+@media (max-width: 767.98px) {
+
+    /*
+        Reduz o espaço vertical da seção.
+    */
+    .secao-profissionais {
+        scroll-margin-top: 1rem;
+    }
+
+    .secao-profissionais h2 {
+        font-size:
+            clamp(1.9rem, 8vw, 2.5rem);
+    }
+
+    .card-profissional .card-body {
+        padding: 1.5rem;
+    }
+
+    .foto-profissional {
+        width: 125px;
+        height: 125px;
+    }
+
+    .card-profissional p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+}
+
+
+/* ==================================================
+   MOVIMENTO REDUZIDO
+   ================================================== */
+
+/*
+    Remove animações quando o usuário
+    solicita menos movimento no sistema.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    .card-profissional,
+    .foto-profissional {
+        transition: none;
+    }
+
+    .card-profissional:hover {
+        transform: none;
+    }
+
+    .card-profissional:hover .foto-profissional {
+        transform: none;
+    }
+}

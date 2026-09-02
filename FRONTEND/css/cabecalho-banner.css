@@ -1,0 +1,750 @@
+/* ==================================================
+   VARIÁVEIS DO CABEÇALHO E DO BANNER
+   ================================================== */
+
+/*
+    As principais medidas do cabeçalho e do banner
+    podem ser ajustadas neste único local.
+*/
+:root {
+    /* Alturas do cabeçalho */
+    --altura-logo: 150px;
+    --altura-menu: 65px;
+
+    /* Cores principais */
+    --cor-verde-oliva: #3f432a;
+    --cor-clara: #f3eee8;
+    --cor-destaque: #d7805d;
+
+    /*
+        Largura visual da fotografia.
+
+        68% = fotografia menor
+        72% = valor recomendado
+        76% = fotografia maior
+    */
+    --largura-imagem-banner: 80%;
+
+    /*
+        Largura da área reservada ao texto.
+
+        Ela pode ocupar parte da região onde
+        a imagem já está sendo esmaecida.
+    */
+    --largura-conteudo-banner: 50%;
+
+    /*
+        Escala aplicada à fotografia.
+
+        1 = sem ampliação adicional
+        1.02 = pequeno zoom
+        1.05 = zoom mais perceptível
+    */
+    --escala-imagem-banner: 1;
+
+    /*
+        Enquadramento horizontal e vertical da foto.
+
+        Horizontal:
+        0% = mostra mais a esquerda
+        50% = centraliza
+        100% = mostra mais a direita
+    */
+    --posicao-imagem-x: 90%;
+    --posicao-imagem-y: 50%;
+}
+
+
+/* ==================================================
+   CABEÇALHO PRINCIPAL
+   ================================================== */
+
+/*
+    Área que envolve o logotipo e o menu.
+*/
+.cabecalho-principal {
+    width: 100%;
+    max-width: 100%;
+
+    background-color: var(--cor-verde-oliva);
+}
+
+
+/* ==================================================
+   ÁREA DO LOGOTIPO
+   ================================================== */
+
+/*
+    Faixa superior que contém o logotipo.
+*/
+.marca-topo {
+    width: 100%;
+    height: var(--altura-logo);
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/*
+    Link que envolve o logotipo.
+*/
+.logo-althea {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/*
+    Imagem do logotipo.
+*/
+.logo-cabecalho {
+    width: clamp(240px, 26vw, 420px);
+    height: auto;
+
+    display: block;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+
+/*
+    Destaque para navegação utilizando Tab.
+*/
+.logo-althea:focus-visible {
+    outline: 2px solid var(--cor-destaque);
+    outline-offset: 6px;
+
+    border-radius: 6px;
+}
+
+
+/* ==================================================
+   MENU PRINCIPAL
+   ================================================== */
+
+/*
+    Barra que contém os links de navegação.
+*/
+.menu-principal {
+    width: 100%;
+    min-height: var(--altura-menu);
+
+    display: flex;
+    align-items: center;
+
+    background-color: var(--cor-verde-oliva);
+
+    border-top:
+        1px solid rgba(243, 238, 232, 0.15);
+}
+
+
+/*
+    Links do menu.
+*/
+.menu-principal .nav-link {
+    padding:
+        0.9rem 1.3rem;
+
+    color: var(--cor-clara);
+
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    letter-spacing: 0.06rem;
+    text-transform: uppercase;
+
+    transition: color 0.3s ease;
+}
+
+
+/*
+    Link ao passar o mouse ou receber foco.
+*/
+.menu-principal .nav-link:hover,
+.menu-principal .nav-link:focus-visible {
+    color: var(--cor-destaque);
+
+    outline: none;
+}
+
+
+/*
+    Link correspondente à seção atual.
+*/
+.menu-principal .nav-link.active {
+    color: var(--cor-destaque);
+}
+
+
+/*
+    Botão do menu mobile.
+*/
+.menu-principal .navbar-toggler {
+    border-color:
+        rgba(243, 238, 232, 0.28);
+}
+
+
+/*
+    Foco do botão do menu mobile.
+*/
+.menu-principal .navbar-toggler:focus {
+    border-color: var(--cor-destaque);
+
+    box-shadow:
+        0 0 0 0.2rem rgba(215, 128, 93, 0.25);
+}
+
+
+/*
+    Ícone claro sobre o fundo verde.
+*/
+.menu-principal .navbar-toggler-icon {
+    filter:
+        brightness(0) invert(1);
+}
+
+
+/* ==================================================
+   ESTRUTURA PRINCIPAL DO BANNER
+   ================================================== */
+
+/*
+    O fundo principal do banner é verde-oliva.
+
+    A fotografia será posicionada por cima desse fundo,
+    somente na parte esquerda.
+*/
+.banner-principal {
+    position: relative;
+    isolation: isolate;
+
+    width: 100%;
+    max-width: 100%;
+
+    /*
+        Compatibilidade com navegadores antigos.
+    */
+    min-height: calc(100vh - var(--altura-logo) - var(--altura-menu));
+
+    /*
+        Melhor comportamento em dispositivos móveis.
+    */
+    min-height: calc(100svh - var(--altura-logo) - var(--altura-menu));
+
+    margin-bottom: 3rem;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    background-color: var(--cor-verde-oliva);
+}
+
+
+/* ==================================================
+   CAMADA DA FOTOGRAFIA
+   ================================================== */
+
+/*
+    Esta camada contém somente a fotografia.
+
+    Ela fica sobre o fundo verde-oliva
+    e abaixo do conteúdo textual.
+*/
+.banner-imagem {
+    position: relative;
+    z-index: 0;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: var(--largura-imagem-banner);
+
+    overflow: hidden;
+
+    pointer-events: none;
+}
+
+
+/*
+    A fotografia agora é um elemento HTML verdadeiro.
+
+    Isso permite controlar:
+    - tamanho;
+    - posição;
+    - enquadramento;
+    - zoom;
+    - movimento parallax.
+*/
+.banner-imagem img {
+    position: absolute;
+
+    /*
+        A imagem ultrapassa um pouco a altura do banner.
+        Isso evita espaços vazios durante o parallax.
+    */
+    top: 35px;
+    left: -57;
+
+    width: 100%;
+    height: calc(99% + 91px);
+
+    /*
+        cover preenche a camada sem deformar a foto.
+
+        Como a área da imagem possui uma proporção
+        semelhante à fotografia, o corte será pequeno.
+    */
+    object-fit: cover;
+
+    object-position:
+        var(--posicao-imagem-x) var(--posicao-imagem-y);
+
+    display: block;
+
+    /*
+        --parallax-y é alterada pelo script.js.
+
+        A escala pode ser controlada na variável
+        --escala-imagem-banner.
+    */
+    transform:
+        translateY(var(--parallax-y, 0px)) scale(var(--escala-imagem-banner));
+
+    transform-origin: center;
+
+    will-change: transform;
+}
+
+
+
+
+/* ==================================================
+   ÁREA VERDE E CONTEÚDO DO BANNER
+   ================================================== */
+
+/*
+    Esta camada ocupa somente a parte direita.
+
+    O texto não depende da posição da fotografia.
+*/
+.banner-conteudo {
+    position: relative;
+    z-index: 2;
+
+    width: var(--largura-conteudo-banner);
+    min-width: 0;
+
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/*
+    Agrupa subtítulo, título e botão.
+*/
+.conteudo-banner {
+    width: 100%;
+    max-width: 650px;
+    min-width: 0;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+
+/*
+    Pequeno texto acima do título.
+*/
+.banner-subtitulo {
+    margin-bottom: 1rem;
+
+    color: var(--cor-clara);
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    letter-spacing: 0.18rem;
+    text-transform: uppercase;
+}
+
+
+/*
+    Título principal do banner.
+*/
+.banner-principal h1 {
+    max-width: 100%;
+
+    margin:
+        0 auto;
+
+    color: #ffffff;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(2.5rem, 4vw, 3.8rem);
+
+    line-height: 1.1;
+
+    overflow-wrap: normal;
+    word-break: normal;
+
+    text-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+
+/*
+    Texto complementar, caso seja adicionado
+    abaixo do título futuramente.
+*/
+.banner-texto {
+    max-width: 560px;
+
+    margin:
+        1.5rem auto 0;
+
+    color: #ffffff;
+
+    font-size: 1.1rem;
+    line-height: 1.7;
+
+    text-shadow:
+        0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+
+/*
+    Botão localizado dentro da área verde.
+*/
+.banner-conteudo .btn-althea {
+    min-width: 220px;
+
+    margin-top: 2rem;
+
+    padding:
+        0.75rem 1.5rem;
+
+    border-radius: 10px;
+}
+
+
+/* ==================================================
+   COMPUTADORES COM JANELA MENOR
+   ================================================== */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+    :root {
+        --largura-imagem-banner: 70%;
+        --largura-conteudo-banner: 45%;
+    }
+
+
+    .banner-conteudo {
+        padding:
+            2.5rem 2rem;
+    }
+
+
+    .banner-principal h1 {
+        font-size:
+            clamp(2.5rem, 4.6vw, 3.8rem);
+    }
+
+
+    .banner-subtitulo {
+        font-size: 0.78rem;
+
+        letter-spacing: 0.14rem;
+    }
+}
+
+
+/* ==================================================
+   TABLET
+   ================================================== */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    :root {
+        --altura-logo: 110px;
+        --altura-menu: 58px;
+
+        --largura-imagem-banner: 76%;
+        --largura-conteudo-banner: 49%;
+
+        --posicao-imagem-x: 10%;
+    }
+
+
+    /*
+        A transição começa um pouco mais cedo
+        em telas intermediárias.
+    */
+    .banner-imagem::after {
+        background:
+            linear-gradient(to right,
+
+                rgba(63, 67, 42, 0) 0%,
+                rgba(63, 67, 42, 0) 38%,
+
+                rgba(63, 67, 42, 0.08) 47%,
+                rgba(63, 67, 42, 0.22) 56%,
+                rgba(63, 67, 42, 0.42) 65%,
+                rgba(63, 67, 42, 0.65) 74%,
+                rgba(63, 67, 42, 0.84) 83%,
+                rgba(63, 67, 42, 0.96) 92%,
+
+                var(--cor-verde-oliva) 100%);
+    }
+
+        .banner-imagem {
+        position: absolute;
+        width: 100%;
+    }
+
+
+    .banner-conteudo {
+        padding:
+            2.5rem 1.75rem;
+    }
+
+
+    .banner-principal h1 {
+        font-size:
+            clamp(2.3rem, 3.6vw, 3.5rem);
+    }
+
+
+    .logo-cabecalho {
+        width:
+            min(360px, 48vw);
+    }
+}
+
+
+/* ==================================================
+   CELULAR
+   ================================================== */
+
+@media (max-width: 767.98px) {
+
+    :root {
+        --altura-logo: 110px;
+        --altura-menu: 64px;
+
+        --largura-imagem-banner: 100%;
+        --largura-conteudo-banner: 100%;
+
+        --posicao-imagem-x: 30%;
+        --posicao-imagem-y: 50%;
+    }
+
+
+    /* ------------------------------
+       LOGOTIPO
+       ------------------------------ */
+
+    .logo-cabecalho {
+        width:
+            min(300px, 80vw);
+    }
+
+
+    /* ------------------------------
+       MENU
+       ------------------------------ */
+
+    .menu-principal {
+        padding:
+            0.4rem 0;
+    }
+
+
+    .menu-principal .navbar-collapse {
+        padding-bottom: 0.75rem;
+    }
+
+
+    .menu-principal .nav-link {
+        padding:
+            0.75rem 1rem;
+
+        text-align: center;
+    }
+
+
+    /* ------------------------------
+       BANNER
+       ------------------------------ */
+
+    .banner-principal {
+        min-height:
+            max(540px,
+                calc(100svh - var(--altura-logo) - var(--altura-menu)));
+    }
+
+
+    /*
+        A imagem ocupa todo o banner no celular.
+    */
+    .banner-imagem {
+        position: absolute;
+        width: 100%;
+    }
+
+
+    /*
+        No celular, a fotografia preenche a tela.
+    */
+    .banner-imagem img {
+        top: -20px;
+
+        height: calc(100% + 40px);
+
+        object-fit: cover;
+
+        transform:
+            translateY(var(--parallax-y, 0px)) scale(1.02);
+    }
+
+
+    /*
+        Em vez de uma transição lateral,
+        o celular recebe uma camada escura uniforme.
+    */
+    .banner-imagem::after {
+        background:
+            linear-gradient(to bottom,
+
+                rgba(34, 45, 35, 0.34) 0%,
+                rgba(34, 45, 35, 0.48) 50%,
+                rgba(34, 45, 35, 0.72) 100%);
+    }
+
+
+    /*
+        O conteúdo ocupa todo o banner
+        e fica centralizado.
+    */
+    .banner-conteudo {
+        width: 100%;
+        min-height: inherit;
+
+        margin-left: 0;
+
+        padding:
+            3rem 1.25rem;
+
+        align-items: center;
+    }
+
+
+    .conteudo-banner {
+        max-width: 540px;
+    }
+
+
+    .banner-principal h1 {
+        font-size:
+            clamp(2.2rem, 10vw, 3.2rem);
+
+        line-height: 1.08;
+    }
+
+
+    .banner-subtitulo {
+        font-size: 0.78rem;
+
+        letter-spacing: 0.13rem;
+    }
+
+
+    .banner-texto {
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+
+    .banner-conteudo .btn-althea {
+        width:
+            min(280px, 80vw);
+
+        min-width: 0;
+
+        margin-top: 1.75rem;
+    }
+}
+
+
+/* ==================================================
+   CELULARES PEQUENOS
+   ================================================== */
+
+@media (max-width: 389.98px) {
+
+    .banner-principal h1 {
+        font-size:
+            clamp(2rem, 10vw, 2.7rem);
+    }
+
+
+    .banner-subtitulo {
+        font-size: 0.72rem;
+
+        letter-spacing: 0.10rem;
+    }
+
+
+    .banner-conteudo {
+        padding:
+            2.5rem 1rem;
+    }
+}
+
+
+/* ==================================================
+   ACESSIBILIDADE — MOVIMENTO REDUZIDO
+   ================================================== */
+
+/*
+    Desativa o efeito parallax quando o usuário
+    solicita menos animações no sistema operacional.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    .banner-imagem img {
+        transform:
+            scale(var(--escala-imagem-banner));
+
+        will-change: auto;
+    }
+}

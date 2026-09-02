@@ -1,0 +1,74 @@
+==================================================
+INICIAR EVOLUTION API - FISIO ALTHEA
+==================================================
+
+1. Abrir o Prompt de Comando do Windows.
+
+2. Acessar a pasta da Evolution API:
+
+cd C:\Users\everton.balbinot\Projetos\evolution-api
+
+3. Iniciar a Evolution API:
+
+npm run start:prod
+
+4. Aguardar aparecer uma mensagem semelhante a:
+
+[SERVER] HTTP - ON: 8080
+
+Isso significa que a Evolution API está funcionando.
+
+==================================================
+ACESSOS
+==================================================
+
+Página inicial da Evolution API:
+
+http://localhost:8080
+
+Evolution Manager:
+
+http://localhost:8080/manager
+
+Acesso pela rede local:
+
+http://192.168.15.215:8080
+
+Evolution Manager pela rede local:
+
+http://192.168.15.215:8080/manager
+
+API Key Global :
+50CE05BB90A2CFBC0977609F7F1EE6986491C81DD5B6BF27543FE950B4A77D10
+
+
+==================================================
+IMPORTANTE
+==================================================
+
+O Prompt de Comando onde foi executado:
+
+npm run start:prod
+
+deve permanecer aberto enquanto a Evolution API estiver sendo utilizada.
+
+Para parar a Evolution API:
+
+Ctrl + C
+
+==================================================
+RESUMO RÁPIDO
+==================================================
+
+cd C:\Users\everton.balbinot\Projetos\evolution-api
+
+npm run start:prod
+
+Depois acessar:
+
+http://localhost:8080/manager
+
+
+
+npm run start:prod
+

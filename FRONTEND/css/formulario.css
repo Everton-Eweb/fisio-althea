@@ -1,0 +1,455 @@
+/* ==================================================
+   SEÇÃO DE AGENDAMENTO
+   ================================================== */
+
+/*
+    Área responsável pelo formulário
+    de solicitação de avaliação.
+*/
+.secao-agendamento {
+    width: 100%;
+    max-width: 100%;
+
+    border-top:
+        1px solid rgba(63, 67, 42, 0.15);
+
+    /*
+        Cria um espaço acima da seção quando
+        ela é acessada pelos links do menu.
+    */
+    scroll-margin-top: 2rem;
+}
+
+
+/*
+    Título principal da seção.
+*/
+.secao-agendamento h2 {
+    color: #3f432a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.2;
+}
+
+
+/*
+    Texto introdutório localizado
+    abaixo do título.
+*/
+.secao-agendamento > .text-center p {
+    max-width: 680px;
+
+    margin-right: auto;
+    margin-left: auto;
+
+    color: #625f55;
+
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   CAIXA DO FORMULÁRIO
+   ================================================== */
+
+/*
+    Aparência da caixa que envolve
+    todos os campos do formulário.
+*/
+.formulario-agendamento {
+    width: 100%;
+
+    padding: 2rem;
+
+    background-color: #fffaf5;
+
+    border:
+        1px solid rgba(63, 67, 42, 0.08);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 16px rgba(63, 67, 42, 0.16);
+
+    transition:
+        box-shadow 0.35s ease;
+}
+
+
+/*
+    Aumenta discretamente a sombra quando
+    algum campo interno recebe foco.
+*/
+.formulario-agendamento:focus-within {
+    box-shadow:
+        0 12px 28px rgba(63, 67, 42, 0.21);
+}
+
+
+/* ==================================================
+   RÓTULOS DOS CAMPOS
+   ================================================== */
+
+/*
+    Os labels identificam o conteúdo
+    esperado em cada campo.
+*/
+.formulario-agendamento .form-label {
+    margin-bottom: 0.45rem;
+
+    color: #3f432a;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   CAMPOS DO FORMULÁRIO
+   ================================================== */
+
+/*
+    Estilo compartilhado pelos campos de texto,
+    telefone, seleção e mensagem.
+*/
+.formulario-agendamento .form-control,
+.formulario-agendamento .form-select {
+    min-height: 48px;
+
+    padding:
+        0.75rem
+        0.9rem;
+
+    background-color: #ffffff;
+    color: #3f432a;
+
+    border:
+        1px solid rgba(63, 67, 42, 0.25);
+
+    border-radius: 10px;
+
+    font-size: 1rem;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.25s ease;
+}
+
+
+/*
+    O campo de mensagem pode ter altura maior.
+*/
+.formulario-agendamento textarea.form-control {
+    min-height: 130px;
+
+    /*
+        Permite aumentar a altura do campo,
+        mas impede alteração horizontal.
+    */
+    resize: vertical;
+}
+
+
+/*
+    Cor dos textos de exemplo exibidos
+    dentro dos campos.
+*/
+.formulario-agendamento
+.form-control::placeholder {
+    color: rgba(98, 95, 85, 0.68);
+
+    opacity: 1;
+}
+
+
+/*
+    Aparência dos campos quando
+    recebem foco.
+*/
+.formulario-agendamento .form-control:focus,
+.formulario-agendamento .form-select:focus {
+    background-color: #ffffff;
+
+    border-color: #b75b3b;
+
+    box-shadow:
+        0 0 0 0.25rem rgba(183, 91, 59, 0.18);
+
+    outline: none;
+}
+
+
+/*
+    Aparência dos campos válidos depois
+    da validação do navegador.
+*/
+.formulario-agendamento
+.form-control:valid:not(:placeholder-shown) {
+    border-color:
+        rgba(63, 67, 42, 0.45);
+}
+
+
+/*
+    Evita aplicar destaque de campo válido
+    ao select enquanto nenhuma opção real
+    tiver sido escolhida.
+*/
+.formulario-agendamento
+.form-select:valid {
+    border-color:
+        rgba(63, 67, 42, 0.45);
+}
+
+
+/* ==================================================
+   BOTÃO DO FORMULÁRIO
+   ================================================== */
+
+/*
+    Ajustes específicos do botão somente
+    dentro do formulário.
+
+    A aparência principal de .btn-althea
+    continua definida no base.css.
+*/
+.formulario-agendamento .btn-althea {
+    min-width: 190px;
+
+    padding:
+        0.75rem
+        1.5rem;
+
+    font-weight: 600;
+
+    border-radius: 10px;
+}
+
+
+/* ==================================================
+   MENSAGEM DE RETORNO
+   ================================================== */
+
+/*
+    Caixa exibida pelo JavaScript depois
+    do envio do formulário.
+*/
+.alerta-althea {
+    padding:
+        1rem
+        1.25rem;
+
+    background-color: #e4e5d5;
+    color: #3f432a;
+
+    border:
+        1px solid rgba(63, 67, 42, 0.25);
+
+    border-radius: 12px;
+
+    line-height: 1.6;
+
+    box-shadow:
+        0 4px 12px rgba(63, 67, 42, 0.12);
+}
+
+
+/*
+    Remove a margem inferior de um eventual
+    parágrafo inserido dentro da mensagem.
+*/
+.alerta-althea p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ==================================================
+   VALIDAÇÃO VISUAL OPCIONAL
+   ================================================== */
+
+/*
+    Estas classes podem ser adicionadas
+    posteriormente pelo JavaScript.
+*/
+.formulario-agendamento .campo-invalido {
+    border-color: #b34134;
+
+    box-shadow:
+        0 0 0 0.25rem rgba(179, 65, 52, 0.15);
+}
+
+
+/*
+    Texto de erro que poderá ser usado
+    abaixo de um campo inválido.
+*/
+.mensagem-campo-invalido {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+
+    color: #9b3329;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+
+/* ==================================================
+   AJUSTES PARA TABLET
+   ================================================== */
+
+@media (
+    min-width: 768px
+) and (
+    max-width: 991.98px
+) {
+
+    .formulario-agendamento {
+        padding: 1.75rem;
+    }
+}
+
+
+/* ==================================================
+   AJUSTES PARA CELULAR
+   ================================================== */
+
+@media (max-width: 767.98px) {
+
+    /*
+        Reduz o espaço necessário ao navegar
+        para esta seção pelo menu.
+    */
+    .secao-agendamento {
+        scroll-margin-top: 1rem;
+    }
+
+
+    .secao-agendamento h2 {
+        font-size:
+            clamp(1.9rem, 8vw, 2.5rem);
+    }
+
+
+    /*
+        Reduz o espaço interno para aproveitar
+        melhor a largura da tela.
+    */
+    .formulario-agendamento {
+        padding: 1.35rem;
+
+        border-radius: 14px;
+    }
+
+
+    .formulario-agendamento .form-control,
+    .formulario-agendamento .form-select {
+        min-height: 46px;
+
+        font-size: 1rem;
+    }
+
+
+    .formulario-agendamento
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+
+    /*
+        No celular, o botão ocupa toda
+        a largura disponível.
+    */
+    .formulario-agendamento .btn-althea {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    .alerta-althea {
+        padding: 0.9rem 1rem;
+    }
+}
+
+
+/* ==================================================
+   CELULARES PEQUENOS
+   ================================================== */
+
+@media (max-width: 389.98px) {
+
+    .formulario-agendamento {
+        padding: 1.1rem;
+    }
+
+
+    .formulario-agendamento .form-label {
+        font-size: 0.9rem;
+    }
+
+
+    .formulario-agendamento .form-control,
+    .formulario-agendamento .form-select {
+        padding:
+            0.68rem
+            0.75rem;
+
+        font-size: 0.95rem;
+    }
+}
+
+
+/* ==================================================
+   ACESSIBILIDADE — MOVIMENTO REDUZIDO
+   ================================================== */
+
+/*
+    Remove as transições quando o usuário
+    solicita menos animações no sistema.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    .formulario-agendamento,
+    .formulario-agendamento .form-control,
+    .formulario-agendamento .form-select {
+        transition: none;
+    }
+}
+
+
+/* ==========================================
+   MENSAGEM DE RETORNO DO FORMULÁRIO
+   ========================================== */
+
+#mensagem-formulario {
+    max-width: 450px;
+    margin: 14px auto 0;
+    padding: 10px 16px;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+
+    color: #3f432a;
+    background-color: rgba(222, 18, 11, 0.354);
+
+    border-radius: 8px;
+}
+
+/*
+    Quando não existe nenhuma mensagem,
+    o elemento não ocupa espaço no formulário.
+*/
+#mensagem-formulario:empty {
+    display: none;
+}

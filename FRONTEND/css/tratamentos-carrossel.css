@@ -1,0 +1,777 @@
+/* ==================================================
+   SEÇÃO DE TRATAMENTOS
+   ================================================== */
+
+/*
+    Área que contém o título e o carrossel.
+*/
+.secao-tratamentos {
+    width: 100%;
+    max-width: 100%;
+
+    padding-top: 1rem;
+
+    /*
+        Cria um pequeno espaço acima da seção
+        quando ela é acessada pelo menu.
+    */
+    scroll-margin-top: 2rem;
+}
+
+
+/*
+    Título da seção de tratamentos.
+*/
+.secao-tratamentos h2 {
+    color: #3f432a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.2;
+}
+
+
+/* ==================================================
+   CARDS DOS TRATAMENTOS
+   ================================================== */
+
+/*
+    Aparência geral de cada card.
+*/
+.card-tratamento {
+    height: 100%;
+
+    overflow: hidden;
+
+    background-color: #fffaf5;
+
+    border: none;
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 14px rgba(63, 67, 42, 0.16);
+
+    /*
+        Evita que o verso do card apareça
+        durante os movimentos em 3D.
+    */
+    backface-visibility: hidden;
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+/*
+    Espaçamento interno do conteúdo do card.
+*/
+.card-tratamento .card-body {
+    padding: 1.5rem;
+}
+
+
+/*
+    Título de cada tratamento.
+*/
+.card-tratamento .card-title {
+    color: #3f432a;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: 700;
+}
+
+
+/*
+    Descrição exibida dentro dos cards.
+*/
+.card-tratamento .card-text {
+    color: #625f55;
+
+    font-size: 0.96rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   IMAGENS DOS TRATAMENTOS
+   ================================================== */
+
+/*
+    Todas as imagens recebem o mesmo tamanho
+    para que os cards permaneçam alinhados.
+*/
+.imagem-tratamento {
+    width: 100%;
+
+    /*
+        Mantém uma proporção vertical padronizada.
+    */
+    aspect-ratio: 4 / 5;
+
+    /*
+        contain exibe a fotografia inteira
+        sem cortar suas extremidades.
+    */
+    object-fit: contain;
+    object-position: center;
+
+    display: block;
+
+    background-color: #eee7df;
+
+    border-radius:
+        16px
+        16px
+        0
+        0;
+}
+
+
+/*
+    Para fazer a imagem preencher toda a área,
+    use object-fit: cover.
+
+    Isso pode cortar partes da fotografia.
+*/
+
+
+/* ==================================================
+   ÁREA GERAL DO CARROSSEL
+   ================================================== */
+
+/*
+    Elemento principal que envolve todo o carrossel.
+
+    perspective cria a sensação de profundidade
+    utilizada nos cards laterais.
+*/
+.carrossel-tratamentos {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+
+    padding-bottom: 2rem;
+
+    perspective: 1400px;
+}
+
+
+/*
+    Janela visível do carrossel.
+
+    Os cards que ultrapassarem suas laterais
+    permanecem escondidos.
+*/
+.janela-carrossel {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+    height: 640px;
+
+    overflow: hidden;
+}
+
+
+/*
+    Área tridimensional onde os cards
+    são posicionados.
+*/
+.trilha-carrossel {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style: preserve-3d;
+}
+
+
+/* ==================================================
+   CONFIGURAÇÃO GERAL DOS ITENS
+   ================================================== */
+
+/*
+    Todos os cards começam centralizados.
+
+    As regras nth-child definem depois
+    qual fica no centro, à direita ou à esquerda.
+*/
+.item-carrossel {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    /*
+        O card terá no máximo 340px,
+        mas poderá diminuir em telas estreitas.
+    */
+    width: min(340px, 82vw);
+    max-width: 100%;
+
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.70);
+
+    transform-origin: center;
+
+    transition:
+        transform 0.7s ease,
+        opacity 0.7s ease,
+        filter 0.7s ease;
+
+    pointer-events: auto;
+
+    backface-visibility: hidden;
+
+    will-change:
+        transform,
+        opacity;
+}
+
+
+/* ==================================================
+   POSIÇÕES DOS QUATRO CARDS
+   ================================================== */
+
+/*
+    CARD CENTRAL
+
+    O primeiro card da trilha aparece em destaque.
+*/
+.item-carrossel:nth-child(1) {
+    z-index: 5;
+
+    opacity: 1;
+
+    filter: none;
+
+    transform:
+        translate(-50%, -50%)
+        translateX(0)
+        translateZ(140px)
+        rotateY(0deg)
+        scale(1);
+}
+
+
+/*
+    PRIMEIRO CARD À DIREITA
+*/
+.item-carrossel:nth-child(2) {
+    z-index: 4;
+
+    opacity: 0.84;
+
+    filter: brightness(0.94);
+
+    transform:
+        translate(-50%, -50%)
+        translateX(82%)
+        translateZ(0)
+        rotateY(-16deg)
+        scale(0.86);
+}
+
+
+/*
+    SEGUNDO CARD À DIREITA
+
+    Ele fica mais distante, menor e menos visível.
+*/
+.item-carrossel:nth-child(3) {
+    z-index: 2;
+
+    opacity: 0.48;
+
+    filter: brightness(0.88);
+
+    transform:
+        translate(-50%, -50%)
+        translateX(145%)
+        translateZ(-160px)
+        rotateY(-23deg)
+        scale(0.72);
+}
+
+
+/*
+    CARD À ESQUERDA
+*/
+.item-carrossel:nth-child(4) {
+    z-index: 4;
+
+    opacity: 0.84;
+
+    filter: brightness(0.94);
+
+    transform:
+        translate(-50%, -50%)
+        translateX(-82%)
+        translateZ(0)
+        rotateY(16deg)
+        scale(0.86);
+}
+
+
+/* ==================================================
+   DESTAQUE E INTERAÇÃO
+   ================================================== */
+
+/*
+    Sombra mais forte no card que está ativo.
+*/
+.item-carrossel.item-ativo .card-tratamento {
+    box-shadow:
+        0 18px 45px rgba(63, 67, 42, 0.30);
+}
+
+
+/*
+    Pequeno movimento quando o mouse passa
+    sobre o card central.
+*/
+.item-carrossel.item-ativo:hover .card-tratamento {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 22px 50px rgba(63, 67, 42, 0.34);
+}
+
+
+/*
+    Mostra que os cards laterais podem
+    ser selecionados com o mouse.
+*/
+.item-carrossel:not(.item-ativo) {
+    cursor: pointer;
+}
+
+
+/*
+    Desativa temporariamente os links e botões
+    existentes dentro dos cards laterais.
+
+    Assim, o clique primeiro traz o card
+    para a posição central.
+*/
+.item-carrossel:not(.item-ativo) a,
+.item-carrossel:not(.item-ativo) button {
+    pointer-events: none;
+}
+
+
+/*
+    Destaque para navegação pelo teclado.
+*/
+.item-carrossel.item-ativo:focus-within
+.card-tratamento {
+    outline: 3px solid #b75b3b;
+    outline-offset: 5px;
+}
+
+
+/* ==================================================
+   CONTROLES DO CARROSSEL
+   ================================================== */
+
+/*
+    Área que contém os botões anterior,
+    pausar e próximo.
+*/
+.controles-carrossel {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1rem;
+
+    margin-top: 1rem;
+}
+
+
+/*
+    Aparência padrão dos controles.
+*/
+.controle-carrossel {
+    min-width: 48px;
+    min-height: 48px;
+
+    padding:
+        0.65rem
+        1rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #3f432a;
+    color: #f3eee8;
+
+    border: none;
+    border-radius: 50px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/*
+    Estado ao passar o mouse ou navegar
+    utilizando a tecla Tab.
+*/
+.controle-carrossel:hover,
+.controle-carrossel:focus-visible {
+    background-color: #b75b3b;
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(63, 67, 42, 0.25);
+
+    outline: none;
+}
+
+
+/*
+    Efeito aplicado durante o clique.
+*/
+.controle-carrossel:active {
+    transform: translateY(0);
+}
+
+
+/*
+    Botão Pausar precisa de mais largura.
+*/
+.controle-pausa {
+    min-width: 105px;
+}
+
+
+/*
+    Destaque quando a área completa do carrossel
+    recebe foco pela tecla Tab.
+*/
+.carrossel-tratamentos:focus-visible {
+    outline: 3px solid #b75b3b;
+    outline-offset: 8px;
+
+    border-radius: 16px;
+}
+
+
+/* ==================================================
+   COMPUTADORES COM JANELA MENOR
+   ================================================== */
+
+@media (
+    min-width: 992px
+) and (
+    max-width: 1199.98px
+) {
+
+    /*
+        Reduz os cards quando a janela do computador
+        não possui largura suficiente.
+    */
+    .item-carrossel {
+        width: min(315px, 76vw);
+    }
+
+
+    .item-carrossel:nth-child(2) {
+        transform:
+            translate(-50%, -50%)
+            translateX(74%)
+            translateZ(0)
+            rotateY(-15deg)
+            scale(0.84);
+    }
+
+
+    .item-carrossel:nth-child(3) {
+        transform:
+            translate(-50%, -50%)
+            translateX(128%)
+            translateZ(-150px)
+            rotateY(-21deg)
+            scale(0.70);
+    }
+
+
+    .item-carrossel:nth-child(4) {
+        transform:
+            translate(-50%, -50%)
+            translateX(-74%)
+            translateZ(0)
+            rotateY(15deg)
+            scale(0.84);
+    }
+}
+
+
+/* ==================================================
+   TABLET
+   ================================================== */
+
+@media (
+    min-width: 768px
+) and (
+    max-width: 991.98px
+) {
+
+    .janela-carrossel {
+        height: 620px;
+    }
+
+
+    .item-carrossel {
+        width: min(300px, 70vw);
+    }
+
+
+    /*
+        Card central.
+    */
+    .item-carrossel:nth-child(1) {
+        transform:
+            translate(-50%, -50%)
+            translateX(0)
+            translateZ(100px)
+            rotateY(0deg)
+            scale(1);
+    }
+
+
+    /*
+        Primeiro card à direita.
+    */
+    .item-carrossel:nth-child(2) {
+        opacity: 0.72;
+
+        transform:
+            translate(-50%, -50%)
+            translateX(68%)
+            translateZ(-30px)
+            rotateY(-14deg)
+            scale(0.80);
+    }
+
+
+    /*
+        O card mais distante permanece escondido
+        para não sobrecarregar o tablet.
+    */
+    .item-carrossel:nth-child(3) {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            translateX(110%)
+            scale(0.68);
+
+        pointer-events: none;
+    }
+
+
+    /*
+        Card à esquerda.
+    */
+    .item-carrossel:nth-child(4) {
+        opacity: 0.72;
+
+        transform:
+            translate(-50%, -50%)
+            translateX(-68%)
+            translateZ(-30px)
+            rotateY(14deg)
+            scale(0.80);
+    }
+}
+
+
+/* ==================================================
+   CELULAR
+   ================================================== */
+
+@media (max-width: 767.98px) {
+
+    /*
+        Reduz o espaço acima do carrossel.
+    */
+    .secao-tratamentos {
+        padding-top: 0.5rem;
+    }
+
+
+    /*
+        Altura destinada ao card no celular.
+    */
+    .janela-carrossel {
+        height: 600px;
+    }
+
+
+    /*
+        Apenas um card aparece por vez.
+    */
+    .item-carrossel {
+        width: min(300px, 84vw);
+    }
+
+
+    /*
+        Card central.
+    */
+    .item-carrossel:nth-child(1) {
+        z-index: 5;
+
+        opacity: 1;
+
+        filter: none;
+
+        transform:
+            translate(-50%, -50%)
+            translateX(0)
+            rotateY(0deg)
+            scale(1);
+    }
+
+
+    /*
+        Todos os demais cards permanecem escondidos.
+
+        Quando o JavaScript altera a ordem,
+        o próximo card assume a primeira posição.
+    */
+    .item-carrossel:nth-child(n + 2) {
+        z-index: 1;
+
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            translateX(110%)
+            scale(0.80);
+
+        pointer-events: none;
+    }
+
+
+    /*
+        Aproxima os controles.
+    */
+    .controles-carrossel {
+        gap: 0.65rem;
+
+        margin-top: 0.5rem;
+    }
+
+
+    /*
+        Botões menores no celular.
+    */
+    .controle-carrossel {
+        min-width: 44px;
+        min-height: 44px;
+
+        padding:
+            0.55rem
+            0.8rem;
+    }
+
+
+    .controle-pausa {
+        min-width: 96px;
+    }
+
+
+    /*
+        Reduz o espaçamento interno dos cards.
+    */
+    .card-tratamento .card-body {
+        padding: 1.25rem;
+    }
+}
+
+
+/* ==================================================
+   CELULARES PEQUENOS
+   ================================================== */
+
+@media (max-width: 389.98px) {
+
+    .janela-carrossel {
+        height: 580px;
+    }
+
+
+    .item-carrossel {
+        width: min(275px, 82vw);
+    }
+
+
+    .card-tratamento .card-text {
+        font-size: 0.90rem;
+    }
+
+
+    .controles-carrossel {
+        gap: 0.45rem;
+    }
+
+
+    .controle-pausa {
+        min-width: 88px;
+    }
+}
+
+
+/* ==================================================
+   ACESSIBILIDADE — MOVIMENTO REDUZIDO
+   ================================================== */
+
+/*
+    Desativa as transições quando o usuário
+    solicita menos movimentos no sistema.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    .item-carrossel,
+    .card-tratamento,
+    .controle-carrossel {
+        transition: none;
+    }
+
+
+    .item-carrossel.item-ativo:hover
+    .card-tratamento {
+        transform: none;
+    }
+}

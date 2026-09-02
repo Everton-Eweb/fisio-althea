@@ -1,0 +1,20 @@
+# Configurações locais do VS Code
+.vscode/
+
+# Arquivos compactados do backend
+BACKEND/*.zip
+
+# Arquivos de ambiente que podem conter senhas e tokens
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Arquivos temporários do Windows
+Thumbs.db
+Desktop.ini
+
+# Arquivos gerados por ferramenta de modernização Java
+.github/modernize/
