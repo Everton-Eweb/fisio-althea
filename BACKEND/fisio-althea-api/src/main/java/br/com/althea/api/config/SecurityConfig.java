@@ -22,6 +22,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
+import java.util.List;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 /*
  * Configuração central de segurança da API.
  *
@@ -49,7 +55,7 @@ public class SecurityConfig {
          */
         @Bean
         public SecurityFilterChain securityFilterChain(
-                        HttpSecurity http) throws Exception {
+                        HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
 
                 http
 
@@ -59,6 +65,13 @@ public class SecurityConfig {
                                  * e não sessão baseada em formulário.
                                  */
                                 .csrf(csrf -> csrf.disable())
+
+                                /*
+                                 * Ativa o CORS utilizando as regras
+                                 * definidas no CorsConfigurationSource.
+                                 */
+                                .cors(cors -> cors.configurationSource(
+                                                corsConfigurationSource))
 
                                 /*
                                  * Define que o servidor não deve criar
@@ -544,7 +557,6 @@ public class SecurityConfig {
                                                                 "ADMINISTRADOR",
                                                                 "RECEPCIONISTA")
 
-
                                                 /*
                                                  * Consulta uma mensagem específica.
                                                  *
@@ -647,6 +659,86 @@ public class SecurityConfig {
                                                 jwtAuthenticationConverter())));
 
                 return http.build();
+        }
+
+        /*
+         * ==================================================
+         * CONFIGURAÇÃO DE CORS
+         * ==================================================
+         *
+         * Permite que o frontend da Fisio Althea,
+         * executado pelo Live Server, faça requisições
+         * para a API Spring Boot.
+         *
+         * Frontend:
+         * http://127.0.0.1:5500
+         *
+         * Backend:
+         * http://localhost:8080
+         *
+         * Tópicos correspondentes:
+         * - Desenvolvimento Web
+         * - APIs REST
+         * - Spring Framework
+         * - Spring Boot
+         * - Arquitetura de Software
+         */
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+
+                /*
+                 * Cria as regras de comunicação
+                 * entre o navegador e a API.
+                 */
+                CorsConfiguration configuracao = new CorsConfiguration();
+
+                /*
+                 * Define qual origem pode acessar a API.
+                 *
+                 * Não utilizamos "*" porque queremos
+                 * liberar somente o frontend do projeto.
+                 */
+                configuracao.setAllowedOrigins(
+                                List.of(
+                                                "http://127.0.0.1:5500"));
+
+                /*
+                 * Métodos HTTP utilizados pela API.
+                 *
+                 * OPTIONS é necessário para as requisições
+                 * de verificação automática feitas pelo navegador.
+                 */
+                configuracao.setAllowedMethods(
+                                List.of(
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE",
+                                                "OPTIONS"));
+
+                /*
+                 * Cabeçalhos que o frontend poderá enviar.
+                 *
+                 * Authorization será utilizado para o JWT.
+                 * Content-Type será utilizado no envio de JSON.
+                 */
+                configuracao.setAllowedHeaders(
+                                List.of(
+                                                "Authorization",
+                                                "Content-Type"));
+
+                /*
+                 * Aplica a configuração para todos
+                 * os endpoints da aplicação.
+                 */
+                UrlBasedCorsConfigurationSource fonte = new UrlBasedCorsConfigurationSource();
+
+                fonte.registerCorsConfiguration(
+                                "/**",
+                                configuracao);
+
+                return fonte;
         }
 
         /*
