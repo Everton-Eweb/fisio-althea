@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fisio Althea: seus dados de paciente.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/cabecalho-banner.css">
+    <link rel="stylesheet" href="css/formulario.css">
+    <link rel="stylesheet" href="css/contato-rodape.css">
+
+    <title>Minha conta — Fisio Althea</title>
+</head>
+
+<body>
+    <header id="inicio" class="cabecalho-principal">
+        <div class="marca-topo">
+            <a href="index.html" class="logo-althea" aria-label="Ir para o início do site">
+                <img src="img/logo1.png" class="logo-cabecalho" alt="Logotipo da clínica Althea">
+            </a>
+        </div>
+
+        <nav class="navbar navbar-expand-lg menu-principal" data-bs-theme="dark" aria-label="Navegação principal">
+            <div class="container">
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menuNavegacao" aria-controls="menuNavegacao" aria-expanded="false"
+                    aria-label="Abrir menu de navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-center" id="menuNavegacao">
+                    <ul class="navbar-nav align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#agendamento">Agendar avaliação</a>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link btn btn-link" id="botaoSair"
+                                style="text-decoration: none;">Sair</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="secao-agendamento mt-5 py-5" aria-labelledby="tituloConta">
+                <div class="text-center mb-4">
+                    <h1 id="tituloConta">Minha conta</h1>
+                    <p>Confira abaixo os dados cadastrados na Fisio Althea.</p>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div id="mensagemConta" class="alert alerta-althea d-none" role="alert"
+                            aria-live="polite"></div>
+
+                        <div id="cardPaciente" class="formulario-agendamento d-none">
+                            <dl class="row mb-0">
+                                <dt class="col-5 col-sm-4">Nome</dt>
+                                <dd class="col-7 col-sm-8" id="campoNome">—</dd>
+
+                                <dt class="col-5 col-sm-4">E-mail</dt>
+                                <dd class="col-7 col-sm-8" id="campoEmail">—</dd>
+
+                                <dt class="col-5 col-sm-4">CPF</dt>
+                                <dd class="col-7 col-sm-8" id="campoCpf">—</dd>
+
+                                <dt class="col-5 col-sm-4">Data de nascimento</dt>
+                                <dd class="col-7 col-sm-8" id="campoDataNascimento">—</dd>
+
+                                <dt class="col-5 col-sm-4">Telefone</dt>
+                                <dd class="col-7 col-sm-8" id="campoTelefone">—</dd>
+
+                                <dt class="col-5 col-sm-4">Endereço</dt>
+                                <dd class="col-7 col-sm-8" id="campoEndereco">—</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="rodape mt-5">
+        <div class="container text-center py-4">
+            <p class="mb-1">&copy; 2026 Fisio Althea</p>
+            <p class="mb-0">Cuidado, movimento e qualidade de vida.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrVwcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/api.js"></script>
+    <script src="js/conta.js"></script>
+</body>
+
+</html>
