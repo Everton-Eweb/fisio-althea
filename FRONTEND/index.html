@@ -148,7 +148,7 @@
 
             <!-- Área exclusiva do conteúdo -->
             <div class="banner-conteudo">
-                    
+
                 <div class="conteudo-banner">
                     <p class="banner-subtitulo">
                         Fisioterapia e bem-estar
@@ -542,7 +542,7 @@
 
                                     <!-- Mensagem de retorno do formulário -->
                                     <p id="mensagem-formulario"></p>
-                                    
+
                                 </div>
 
                             </div>
@@ -686,9 +686,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    <!--
+        Configuração central de comunicação com a API REST
+        e gerenciamento da sessão do usuário.
 
-    <!-- Estrutura base de integração com a API + sessão do usuário -->
+        Deve ser carregada antes dos demais scripts.
+
+        Tópicos correspondentes:
+        - Desenvolvimento Web
+        - APIs REST
+        - Arquitetura de Software
+    -->
     <script src="js/api.js"></script>
+
+    <!-- Controla os itens do menu conforme a sessão do usuário -->
     <script src="js/sessao-ui.js"></script>
 
     <!-- JavaScript personalizado do projeto -->

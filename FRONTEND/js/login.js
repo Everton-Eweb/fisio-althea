@@ -38,7 +38,7 @@ if (formularioLogin) {
 
                 Endpoint público (não exige token).
             */
-            const resposta = await API.requisitar("/api/auth/login", {
+            const resposta = await API.requisitar("/auth/login", {
                 metodo: "POST",
                 corpo: { email, senha }
             });

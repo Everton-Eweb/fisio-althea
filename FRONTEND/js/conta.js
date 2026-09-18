@@ -32,7 +32,7 @@ async function carregarMeusDados() {
             GET /api/pacientes/me
             Exige token de um usuário com perfil PACIENTE.
         */
-        const paciente = await API.requisitar("/api/pacientes/me", {
+        const paciente = await API.requisitar("/pacientes/me", {
             metodo: "GET",
             autenticado: true
         });

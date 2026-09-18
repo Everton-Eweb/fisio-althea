@@ -24,13 +24,13 @@ const API = (function () {
         Durante o desenvolvimento local a aplicação
         Spring Boot roda por padrão na porta 8080.
     */
-    const BASE_URL = "http://localhost:8080";
+    const BASE_URL = "http://localhost:8080/api";
 
     /*
         Chave utilizada para guardar o token
         no localStorage do navegador.
     */
-    const CHAVE_TOKEN = "fisioAlthea.token";
+    const CHAVE_TOKEN = "fisioAltheaToken";
 
     /*
         Chave utilizada para guardar os dados básicos
@@ -85,7 +85,7 @@ const API = (function () {
 
        Parâmetros:
 
-       - caminho: ex. "/api/auth/login"
+       - caminho: ex. "/auth/login"
        - opcoes.metodo: "GET" (padrão), "POST", "PATCH"...
        - opcoes.corpo: objeto que será convertido em JSON
        - opcoes.autenticado: se true, envia o cabeçalho
@@ -99,20 +99,30 @@ const API = (function () {
             autenticado = false
         } = opcoes;
 
-        const cabecalhos = {
-            "Content-Type": "application/json"
-        };
+        const cabecalhos = {};
 
-        if (autenticado) {
-            const token = obterToken();
+        if (corpo) {
+            cabecalhos["Content-Type"] = "application/json";
+        }
 
-            if (!token) {
-                throw new ErroApi(
-                    "Sessão expirada. Faça login novamente.",
-                    401
-                );
-            }
+        const token = obterToken();
 
+        /*
+            Se a chamada exigir autenticação e não houver
+            token armazenado, interrompe antes de consultar a API.
+        */
+        if (autenticado && !token) {
+            throw new ErroApi(
+                "Sessão expirada. Faça login novamente.",
+                401
+            );
+        }
+
+        /*
+            Quando existir um JWT, ele é enviado automaticamente,
+            mantendo o comportamento centralizado da integração.
+        */
+        if (token) {
             cabecalhos["Authorization"] = "Bearer " + token;
         }
 
