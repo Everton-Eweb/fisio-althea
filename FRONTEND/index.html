@@ -110,6 +110,20 @@
                             </a>
                         </li>
 
+                        <!-- Exibido apenas para quem NÃO está autenticado -->
+                        <li class="nav-item" data-area="visitante">
+                            <a class="nav-link" href="login.html">
+                                Entrar
+                            </a>
+                        </li>
+
+                        <!-- Exibido apenas para quem já está autenticado -->
+                        <li class="nav-item d-none" data-area="autenticado">
+                            <a class="nav-link" href="minha-conta.html">
+                                Minha conta
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
 
@@ -672,18 +686,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-
-
     <!--
-    Configuração central de comunicação com a API REST.
-    Deve ser carregada antes do script principal.
+        Configuração central de comunicação com a API REST
+        e gerenciamento da sessão do usuário.
 
-    Tópicos correspondentes:
-    - Desenvolvimento Web
-    - APIs REST
-    - Arquitetura de Software
+        Deve ser carregada antes dos demais scripts.
+
+        Tópicos correspondentes:
+        - Desenvolvimento Web
+        - APIs REST
+        - Arquitetura de Software
     -->
-    <script src="api.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Controla os itens do menu conforme a sessão do usuário -->
+    <script src="js/sessao-ui.js"></script>
 
     <!-- JavaScript personalizado do projeto -->
     <script src="script.js"></script>
