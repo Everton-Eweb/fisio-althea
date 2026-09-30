@@ -53,7 +53,12 @@
 
     <main>
         <div class="container">
+
+            <!-- ==================================================
+             DADOS DO PACIENTE
+             ================================================== -->
             <section class="secao-agendamento mt-5 py-5" aria-labelledby="tituloConta">
+
                 <div class="text-center mb-4">
                     <h1 id="tituloConta">Minha conta</h1>
                     <p>Confira abaixo os dados cadastrados na Fisio Althea.</p>
@@ -61,11 +66,14 @@
 
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-6">
-                        <div id="mensagemConta" class="alert alerta-althea d-none" role="alert"
-                            aria-live="polite"></div>
+
+                        <div id="mensagemConta" class="alert alerta-althea d-none" role="alert" aria-live="polite">
+                        </div>
 
                         <div id="cardPaciente" class="formulario-agendamento d-none">
+
                             <dl class="row mb-0">
+
                                 <dt class="col-5 col-sm-4">Nome</dt>
                                 <dd class="col-7 col-sm-8" id="campoNome">—</dd>
 
@@ -83,11 +91,118 @@
 
                                 <dt class="col-5 col-sm-4">Endereço</dt>
                                 <dd class="col-7 col-sm-8" id="campoEndereco">—</dd>
+
                             </dl>
+
                         </div>
+
                     </div>
                 </div>
+
             </section>
+
+
+            <!-- ==================================================
+             PROFISSIONAIS
+             Issue #3
+             ================================================== -->
+            <section class="secao-profissionais py-5" aria-labelledby="tituloProfissionais">
+
+                <div class="text-center mb-4">
+                    <h2 id="tituloProfissionais">Profissionais</h2>
+                    <p>Conheça os profissionais da Fisio Althea.</p>
+                </div>
+
+                <div id="mensagemProfissionais" class="alert alerta-althea d-none" role="alert" aria-live="polite">
+                </div>
+
+                <div id="listaProfissionais" class="row g-4">
+                    <!-- Os profissionais serão carregados pela API -->
+                </div>
+
+            </section>
+
+            <!-- ==================================================
+MODAL - DETALHES DO PROFISSIONAL
+Issue #3
+================================================== -->
+            <div class="modal fade" id="modalProfissional" tabindex="-1" aria-labelledby="tituloModalProfissional"
+                aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="tituloModalProfissional">
+                                Detalhes do profissional
+                            </h2>
+
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div id="mensagemDetalhesProfissional" class="alert alerta-althea d-none" role="alert"
+                                aria-live="polite">
+                            </div>
+
+                            <div id="dadosDetalhesProfissional">
+
+                                <dl class="row mb-0">
+
+                                    <dt class="col-5">Nome</dt>
+                                    <dd class="col-7" id="detalheProfissionalNome">—</dd>
+
+                                    <dt class="col-5">Especialidade</dt>
+                                    <dd class="col-7" id="detalheProfissionalEspecialidade">—</dd>
+
+                                    <dt class="col-5">CREFITO</dt>
+                                    <dd class="col-7" id="detalheProfissionalCrefito">—</dd>
+
+                                    <dt class="col-5">E-mail</dt>
+                                    <dd class="col-7" id="detalheProfissionalEmail">—</dd>
+
+                                    <dt class="col-5">Telefone</dt>
+                                    <dd class="col-7" id="detalheProfissionalTelefone">—</dd>
+
+                                </dl>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Fechar
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================================================
+            SERVIÇOS
+            Issue #3
+            ================================================== -->
+            <section class="secao-servicos py-5" aria-labelledby="tituloServicos">
+
+                <div class="text-center mb-4">
+                    <h2 id="tituloServicos">Serviços</h2>
+                    <p>Conheça os serviços disponíveis na Fisio Althea.</p>
+                </div>
+
+                <div id="mensagemServicos" class="alert alerta-althea d-none" role="alert" aria-live="polite">
+                </div>
+
+                <div id="listaServicos" class="row g-4">
+                    <!-- Os serviços serão carregados pela API -->
+                </div>
+
+            </section>
+
+
         </div>
     </main>
 
@@ -104,6 +219,8 @@
 
     <script src="js/api.js"></script>
     <script src="js/conta.js"></script>
+    <script src="js/profissionais.js"></script>
+    <script src="js/servicos.js"></script>
 </body>
 
 </html>
