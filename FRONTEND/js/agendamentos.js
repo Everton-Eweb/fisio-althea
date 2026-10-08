@@ -37,6 +37,8 @@ let idPaciente = null;          // vem de GET /api/pacientes/me
 let horarioEscolhido = null;    // "HH:mm:ss", exatamente como a API devolveu
 let idReagendando = null;       // preenchido só no modo reagendar
 let numeroConsulta = 0;         // ignora respostas antigas de horários
+let enviandoAgendamento = false; // Impede envios simultâneos
+let cancelamentosEmAndamento = new Set(); // Controla cancelamentos por ID
 
 if (!API.estaAutenticado()) {
     window.location.href = "login.html?redirecionado=1";
@@ -162,6 +164,11 @@ async function carregarHorarios() {
             botao.textContent = hora.slice(0, 5);
 
             botao.addEventListener("click", function () {
+
+                if (enviandoAgendamento) {
+                    return;
+                }
+
                 listaHorarios
                     .querySelectorAll("button")
                     .forEach(function (b) { b.classList.remove("active"); });
@@ -189,12 +196,23 @@ async function carregarHorarios() {
 async function enviarFormulario(evento) {
     evento.preventDefault();
 
+    // Impede que outra solicitação seja enviada enquanto a atual está em andamento.
+    if (enviandoAgendamento) {
+        return;
+    }
+
     if (!horarioEscolhido) {
         exibirMensagem("Escolha um horário para continuar.", "erro");
         return;
     }
 
+    enviandoAgendamento = true;
+
+    // Invalida consultas de disponibilidade iniciadas antes do envio.
+    numeroConsulta++;
+
     botaoConfirmar.disabled = true;
+    controlarCamposDuranteEnvio(true);
 
     try {
         if (idReagendando) {
@@ -243,9 +261,21 @@ async function enviarFormulario(evento) {
     } catch (erro) {
         tratarErro(erro);
 
-        /* Mostra de novo o que ainda está livre. */
-        carregarHorarios();
+        // Consulta novamente a disponibilidade após a falha.
+        // O botão permanecerá desabilitado até uma nova seleção.
+        await carregarHorarios();
+
+    } finally {
+        enviandoAgendamento = false;
+        controlarCamposDuranteEnvio(false);
     }
+}
+
+function controlarCamposDuranteEnvio(enviando) {
+    selectProfissional.disabled = enviando || idReagendando !== null;
+    selectServico.disabled = enviando || idReagendando !== null;
+    campoData.disabled = enviando;
+    botaoCancelarEdicao.disabled = enviando;
 }
 
 
@@ -340,31 +370,59 @@ function criarCardAgendamento(ag) {
 
 async function cancelarAgendamento(id) {
 
+    // Impede cancelamentos durante o envio de outro agendamento.
+    if (enviandoAgendamento) {
+        return;
+    }
+
+    // Impede duas solicitações simultâneas para o mesmo agendamento.
+    if (cancelamentosEmAndamento.has(id)) {
+        return;
+    }
+
     if (!window.confirm("Deseja realmente cancelar este agendamento?")) {
         return;
     }
 
+    cancelamentosEmAndamento.add(id);
+
     try {
-        /* PATCH /api/agendamentos/{id}/cancelar */
         await API.requisitar(`/agendamentos/${id}/cancelar`, {
             metodo: "PATCH",
             autenticado: true
         });
+
+        // Se o atendimento cancelado estava sendo reagendado,
+        // fecha o modo de edição e limpa o formulário.
+        if (idReagendando === id) {
+            sairDoModoReagendar();
+        }
 
         exibirMensagem("Agendamento cancelado.", "sucesso");
         await carregarMeusAgendamentos();
 
     } catch (erro) {
         tratarErro(erro);
+
+    } finally {
+        cancelamentosEmAndamento.delete(id);
     }
 }
-
 
 /* ==================================================
    MODO REAGENDAR (reaproveita o formulário e os horários)
    ================================================== */
 
 function entrarNoModoReagendar(ag) {
+
+    if (
+        enviandoAgendamento ||
+        cancelamentosEmAndamento.has(ag.idAgendamento)
+    ) {
+        return;
+    }
+
+    numeroConsulta++; // Invalida consultas anteriores de horários
 
     idReagendando = ag.idAgendamento;
 
@@ -389,14 +447,16 @@ function entrarNoModoReagendar(ag) {
 
 function sairDoModoReagendar() {
 
+    numeroConsulta++; // Invalida consultas anteriores de horários
+
     idReagendando = null;
 
     tituloFormulario.textContent = "Novo agendamento";
     botaoConfirmar.textContent = "Confirmar agendamento";
     botaoCancelarEdicao.classList.add("d-none");
 
-    selectProfissional.disabled = false;
-    selectServico.disabled = false;
+    // Respeita o bloqueio enquanto a requisição ainda está em andamento.
+    controlarCamposDuranteEnvio(enviandoAgendamento);
 
     formAgendarHorario.reset();
     listaHorarios.innerHTML = "";

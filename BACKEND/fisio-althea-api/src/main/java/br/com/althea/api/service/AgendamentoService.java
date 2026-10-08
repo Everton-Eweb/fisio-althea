@@ -30,6 +30,7 @@ import br.com.althea.api.repository.ServicoRepository;
 import jakarta.persistence.EntityManager;
 
 import br.com.althea.api.exception.RecursoNaoEncontradoException;
+
 /*
  * Camada de serviço responsável pelas operações
  * relacionadas aos agendamentos da Clínica Althea.
@@ -764,6 +765,12 @@ public class AgendamentoService {
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agendamento não encontrado."));
 
+                // Impede cancelar novamente um atendimento já cancelado.
+                if (agendamento.getStatus() == StatusAgendamento.CANCELADO) {
+                        throw new IllegalArgumentException(
+                                        "Este agendamento já está cancelado.");
+                }
+
                 /*
                  * Altera o status para CANCELADO.
                  */
@@ -935,6 +942,12 @@ public class AgendamentoService {
                                 .findById(id)
                                 .orElseThrow(() -> new IllegalArgumentException(
                                                 "Agendamento não encontrado."));
+
+                // Impede reagendar um atendimento que já foi cancelado.
+                if (agendamento.getStatus() == StatusAgendamento.CANCELADO) {
+                        throw new IllegalArgumentException(
+                                        "Não é possível reagendar um atendimento cancelado.");
+                }
 
                 /*
                  * -------------------------------------------------
