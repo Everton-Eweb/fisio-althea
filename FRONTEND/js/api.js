@@ -1,61 +1,34 @@
-/* ==================================================
-   ESTRUTURA BASE DE INTEGRAÇÃO ENTRE FRONTEND E API
-   ==================================================
-
-   Este arquivo concentra tudo que é comum às
-   requisições feitas para a API do Fisio Althea:
-
-   - URL base da API;
-   - envio automático do token JWT (quando existir);
-   - leitura/gravação do token no localStorage;
-   - tratamento padronizado de erros (ErroResponseDTO);
-   - conversão de JSON.
-
-   Os demais arquivos (login.js, cadastro.js, conta.js)
-   utilizam as funções daqui em vez de chamar fetch()
-   diretamente, evitando repetição de código.
-*/
+// ======================================================
+// FISIO ALTHEA - INTEGRAÇÃO COM A API
+// Tratamento centralizado de erros
+// ======================================================
 
 const API = (function () {
-
-    /*
-        Endereço base da API.
-
-        Durante o desenvolvimento local a aplicação
-        Spring Boot roda por padrão na porta 8080.
-    */
     const BASE_URL = "http://localhost:8080/api";
 
-    /*
-        Chave utilizada para guardar o token
-        no localStorage do navegador.
-    */
     const CHAVE_TOKEN = "fisioAltheaToken";
-
-    /*
-        Chave utilizada para guardar os dados básicos
-        do usuário autenticado (nome, perfil, etc.),
-        devolvidos pelo /api/auth/login.
-    */
     const CHAVE_USUARIO = "fisioAlthea.usuario";
 
-
-    /* ==================================================
-       TOKEN
-       ================================================== */
+    // ==================================================
+    // SESSÃO
+    // ==================================================
 
     function salvarSessao(loginResponse) {
-        localStorage.setItem(CHAVE_TOKEN, loginResponse.token);
+        if (!loginResponse || !loginResponse.token) {
+            throw new Error(
+                "A resposta do login não contém um token válido."
+            );
+        }
 
-        localStorage.setItem(
-            CHAVE_USUARIO,
-            JSON.stringify({
-                idUsuario: loginResponse.idUsuario,
-                nome: loginResponse.nome,
-                email: loginResponse.email,
-                perfil: loginResponse.perfil
-            })
-        );
+        const usuario = {
+            idUsuario: loginResponse.idUsuario,
+            nome: loginResponse.nome,
+            email: loginResponse.email,
+            perfil: loginResponse.perfil
+        };
+
+        localStorage.setItem(CHAVE_TOKEN, loginResponse.token);
+        localStorage.setItem(CHAVE_USUARIO, JSON.stringify(usuario));
     }
 
     function obterToken() {
@@ -63,8 +36,18 @@ const API = (function () {
     }
 
     function obterUsuario() {
-        const bruto = localStorage.getItem(CHAVE_USUARIO);
-        return bruto ? JSON.parse(bruto) : null;
+        const usuario = localStorage.getItem(CHAVE_USUARIO);
+
+        if (!usuario) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(usuario);
+        } catch (erro) {
+            console.error("Não foi possível ler os dados do usuário:", erro);
+            return null;
+        }
     }
 
     function estaAutenticado() {
@@ -76,93 +59,162 @@ const API = (function () {
         localStorage.removeItem(CHAVE_USUARIO);
     }
 
+    // ==================================================
+    // MENSAGENS PADRÃO DE ERRO
+    // ==================================================
 
-    /* ==================================================
-       REQUISIÇÃO PRINCIPAL
-       ==================================================
+    function obterMensagemPadrao(status) {
+        switch (status) {
+            case 400:
+                return "Os dados enviados são inválidos. Confira as informações e tente novamente.";
 
-       Toda chamada à API passa por aqui.
+            case 401:
+                return "Sua sessão expirou. Entre novamente para continuar.";
 
-       Parâmetros:
+            case 403:
+                return "Você não tem permissão para realizar esta ação.";
 
-       - caminho: ex. "/auth/login"
-       - opcoes.metodo: "GET" (padrão), "POST", "PATCH"...
-       - opcoes.corpo: objeto que será convertido em JSON
-       - opcoes.autenticado: se true, envia o cabeçalho
-         Authorization com o token salvo
-    */
+            case 404:
+                return "O recurso solicitado não foi encontrado.";
+
+            case 409:
+                return "Esta operação não pode ser concluída porque existe um conflito com os dados.";
+
+            case 422:
+                return "Não foi possível processar os dados informados. Confira as informações.";
+
+            default:
+                if (status >= 500) {
+                    return "Ocorreu um erro interno no servidor. Tente novamente mais tarde.";
+                }
+
+                return "Não foi possível concluir a solicitação. Tente novamente.";
+        }
+    }
+
+    // ==================================================
+    // EXTRAÇÃO DA MENSAGEM DO BACKEND
+    // ==================================================
+
+    function extrairMensagem(dados, status) {
+        if (dados && typeof dados === "object") {
+            const mensagem =
+                dados.mensagem ||
+                dados.message ||
+                dados.detail ||
+                dados.erro;
+
+            if (typeof mensagem === "string" && mensagem.trim()) {
+                return mensagem;
+            }
+        }
+
+        // Não exibe respostas HTML ou textos técnicos do servidor.
+        return obterMensagemPadrao(status);
+    }
+
+    // ==================================================
+    // TRATAMENTO DE SESSÃO EXPIRADA
+    // ==================================================
+
+    function tratarSessaoExpirada() {
+        encerrarSessao();
+
+        const paginaAtual = window.location.pathname;
+        const paginaLogin = paginaAtual.toLowerCase().endsWith("/login.html");
+
+        if (!paginaLogin) {
+            window.location.href = "login.html?expirado=1";
+        }
+    }
+
+    // ==================================================
+    // REQUISIÇÕES HTTP
+    // ==================================================
+
     async function requisitar(caminho, opcoes = {}) {
-
         const {
             metodo = "GET",
             corpo = null,
             autenticado = false
         } = opcoes;
 
-        const cabecalhos = {};
+        const cabecalhos = {
+            Accept: "application/json"
+        };
 
-        if (corpo) {
+        const temCorpo = corpo !== null && corpo !== undefined;
+
+        if (temCorpo) {
             cabecalhos["Content-Type"] = "application/json";
         }
 
         const token = obterToken();
 
-        /*
-            Se a chamada exigir autenticação e não houver
-            token armazenado, interrompe antes de consultar a API.
-        */
         if (autenticado && !token) {
+            tratarSessaoExpirada();
+
             throw new ErroApi(
-                "Sessão expirada. Faça login novamente.",
+                "Sua sessão expirou. Entre novamente para continuar.",
                 401
             );
         }
 
-        /*
-            Quando existir um JWT, ele é enviado automaticamente,
-            mantendo o comportamento centralizado da integração.
-        */
         if (token) {
-            cabecalhos["Authorization"] = "Bearer " + token;
+            cabecalhos.Authorization = `Bearer ${token}`;
+        }
+
+        const configuracao = {
+            method: metodo,
+            headers: cabecalhos
+        };
+
+        if (temCorpo) {
+            configuracao.body = JSON.stringify(corpo);
         }
 
         let resposta;
 
         try {
-            resposta = await fetch(BASE_URL + caminho, {
-                method: metodo,
-                headers: cabecalhos,
-                body: corpo ? JSON.stringify(corpo) : undefined
-            });
-        } catch (erroDeRede) {
-            /*
-                Ocorre quando a API está fora do ar
-                ou existe algum problema de conexão/CORS.
-            */
+            resposta = await fetch(`${BASE_URL}${caminho}`, configuracao);
+        } catch (erro) {
+            console.error("Erro de conexão com a API:", erro);
+
             throw new ErroApi(
-                "Não foi possível conectar ao servidor. Tente novamente em instantes.",
+                "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
                 0
             );
         }
 
-        /*
-            HTTP 204 (No Content) não possui corpo
-            para ser convertido em JSON.
-        */
         if (resposta.status === 204) {
             return null;
         }
 
-        const dados = await resposta.json().catch(() => null);
+        const texto = await resposta.text();
+        let dados = null;
+
+        if (texto) {
+            try {
+                dados = JSON.parse(texto);
+            } catch (erro) {
+                // A resposta não é JSON válido.
+                dados = null;
+            }
+        }
 
         if (!resposta.ok) {
-            /*
-                O backend padroniza os erros através
-                do ErroResponseDTO: { status, erro, mensagem }.
-            */
-            const mensagem =
-                (dados && dados.mensagem) ||
-                "Ocorreu um erro inesperado. Tente novamente.";
+            const mensagem = extrairMensagem(dados, resposta.status);
+
+            console.error("Erro retornado pela API:", {
+                status: resposta.status,
+                mensagem: mensagem
+            });
+
+            // Somente requisições marcadas como autenticadas
+            // provocam encerramento automático da sessão.
+            if (resposta.status === 401 && autenticado) {
+                tratarSessaoExpirada();
+            }
 
             throw new ErroApi(mensagem, resposta.status);
         }
@@ -170,10 +222,9 @@ const API = (function () {
         return dados;
     }
 
-
-    /* ==================================================
-       API PÚBLICA DO MÓDULO
-       ================================================== */
+    // ==================================================
+    // FUNÇÕES DISPONÍVEIS PARA O RESTANTE DO SISTEMA
+    // ==================================================
 
     return {
         requisitar,
@@ -183,21 +234,16 @@ const API = (function () {
         estaAutenticado,
         encerrarSessao
     };
-
 })();
 
+// ======================================================
+// ERRO PERSONALIZADO DA API
+// ======================================================
 
-/*
-    Classe de erro personalizada para diferenciar
-    falhas da API de outros erros de programação.
-
-    Guarda também o status HTTP, o que permite
-    tratamentos diferentes conforme o caso
-    (401, 400, 404, etc.) quando necessário.
-*/
 class ErroApi extends Error {
-    constructor(mensagem, status) {
+    constructor(mensagem, status = 0) {
         super(mensagem);
+
         this.name = "ErroApi";
         this.status = status;
     }
