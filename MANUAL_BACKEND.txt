@@ -1,0 +1,145 @@
+Manual — iniciar o backend após fechar o terminal
+1. Abra o VS Code novamente
+
+O mais seguro é, quando for voltar a trabalhar no projeto:
+
+Fechar o VS Code
+        ↓
+Abrir o VS Code novamente
+        ↓
+Abrir o projeto fisio-althea
+
+Isso faz o VS Code herdar novamente as variáveis de ambiente do Windows.
+
+Depois abra um terminal PowerShell no VS Code.
+
+2. Entre na pasta do backend
+
+cd C:\Users\everton.balbinot\Desktop\fisio-althea\BACKEND\fisio-althea-api
+
+3. Verifique se a senha do banco foi carregada
+
+Nunca mostre a senha. Use:
+
+if ([string]::IsNullOrWhiteSpace($env:DB_PASSWORD)) {
+    "DB_PASSWORD AUSENTE"
+} else {
+    "DB_PASSWORD CARREGADA"
+}
+
+Se aparecer:
+
+DB_PASSWORD CARREGADA
+
+✅ Não precisa fazer mais nada.
+
+Se aparecer:
+
+DB_PASSWORD AUSENTE
+
+carregue a variável salva no Windows:
+
+$env:DB_PASSWORD = [Environment]::GetEnvironmentVariable("DB_PASSWORD","User")
+
+4. Faça o mesmo para o JWT
+
+Verifique:
+
+if ([string]::IsNullOrWhiteSpace($env:JWT_SECRET)) {
+    "JWT_SECRET AUSENTE"
+} else {
+    "JWT_SECRET CARREGADA"
+}
+
+Se estiver ausente:
+
+$env:JWT_SECRET = [Environment]::GetEnvironmentVariable("JWT_SECRET","User")
+5. Confirmação rápida das duas variáveis
+
+Você pode usar este bloco sempre antes de iniciar o backend:
+
+if ([string]::IsNullOrWhiteSpace($env:DB_PASSWORD)) {
+    $env:DB_PASSWORD = [Environment]::GetEnvironmentVariable("DB_PASSWORD","User")
+}
+
+if ([string]::IsNullOrWhiteSpace($env:JWT_SECRET)) {
+    $env:JWT_SECRET = [Environment]::GetEnvironmentVariable("JWT_SECRET","User")
+}
+
+"DB_PASSWORD: " + $(if ($env:DB_PASSWORD) { "OK" } else { "AUSENTE" })
+"JWT_SECRET: " + $(if ($env:JWT_SECRET) { "OK" } else { "AUSENTE" })
+
+O resultado desejado:
+
+DB_PASSWORD: OK
+JWT_SECRET: OK
+
+Esse código não mostra os valores das variáveis.
+
+6. Rodar os testes
+
+Antes de iniciar a aplicação:
+
+.\mvnw.cmd test
+
+O esperado atualmente é:
+
+Tests run: 50
+Failures: 0
+Errors: 0
+Skipped: 0
+
+BUILD SUCCESS
+7. Iniciar o backend
+
+Se os testes estiverem corretos:
+
+.\mvnw.cmd spring-boot:run
+
+Espere aparecer algo semelhante a:
+
+Started FisioAltheaApiApplication
+
+A API estará disponível em:
+
+http://localhost:8080
+
+E o Swagger em:
+
+http://localhost:8080/swagger-ui/index.html
+Sua rotina ficará assim
+1. Abrir VS Code
+        ↓
+2. Abrir terminal
+        ↓
+3. Entrar na pasta do backend
+        ↓
+4. Carregar DB_PASSWORD se necessário
+        ↓
+5. Carregar JWT_SECRET se necessário
+        ↓
+6. .\mvnw.cmd test
+        ↓
+7. .\mvnw.cmd spring-boot:run
+        ↓
+8. Backend funcionando
+O que você NÃO deve fazer
+
+Nunca coloque a senha diretamente em:
+
+spring.datasource.password=minhaSenha
+
+Mantenha:
+
+spring.datasource.password=${DB_PASSWORD}
+
+E também mantenha:
+
+app.jwt.secret=${JWT_SECRET}
+
+Isso evita enviar credenciais reais para o GitHub.
+
+
+Se algum dia você realmente precisar ver o valor da chave para configurar outro computador, pode recuperá-la com:
+
+[Environment]::GetEnvironmentVariable("JWT_SECRET","User")

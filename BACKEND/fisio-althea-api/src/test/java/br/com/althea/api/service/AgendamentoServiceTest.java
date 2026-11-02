@@ -3546,6 +3546,82 @@ class AgendamentoServiceTest {
                 verify(agendamentoRepository)
                                 .save(agendamento);
         }
-        
+
+        /*
+         * RF08 - Cancelamento de agendamento.
+         *
+         * Um agendamento que já está cancelado
+         * não pode ser cancelado novamente.
+         *
+         * Tópicos:
+         * - Testes de Software
+         * - Engenharia de Software
+         * - Programação Orientada a Objetos
+         */
+        @Test
+        void deveBloquearCancelamentoDeAgendamentoJaCancelado() {
+
+                // 1. Simula um agendamento já cancelado.
+                Agendamento agendamento = new Agendamento();
+                agendamento.setStatus(StatusAgendamento.CANCELADO);
+
+                // 2. Simula a consulta ao banco de dados.
+                when(agendamentoRepository.findById(7L))
+                                .thenReturn(Optional.of(agendamento));
+
+                // 3. Verifica se a Service impede o cancelamento.
+                IllegalArgumentException excecao = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> agendamentoService.cancelar(7L));
+
+                // 4. Confirma que a mensagem de erro está correta.
+                assertEquals(
+                                "Este agendamento já está cancelado.",
+                                excecao.getMessage());
+
+                // 5. Garante que nenhum dado seja salvo.
+                verify(agendamentoRepository, never()).save(any(Agendamento.class));
+        }
+
+        /*
+         * RF08 - Reagendamento de agendamento.
+         *
+         * Um atendimento cancelado não pode
+         * receber uma nova data ou horário.
+         *
+         * Tópicos:
+         * - Testes de Software
+         * - Engenharia de Software
+         * - Programação Orientada a Objetos
+         */
+        @Test
+        void deveBloquearReagendamentoDeAgendamentoCancelado() {
+
+                // 1. Simula um agendamento cancelado.
+                Agendamento agendamento = new Agendamento();
+                agendamento.setStatus(StatusAgendamento.CANCELADO);
+
+                // 2. Prepara os dados de uma tentativa de reagendamento.
+                ReagendamentoRequestDTO dados = new ReagendamentoRequestDTO();
+                dados.setData(LocalDate.of(2026, 10, 15));
+                dados.setHora(LocalTime.of(9, 0));
+
+                // 3. Simula a busca do agendamento no Repository.
+                when(agendamentoRepository.findById(7L))
+                                .thenReturn(Optional.of(agendamento));
+
+                // 4. Verifica se a Service bloqueia o reagendamento.
+                IllegalArgumentException excecao = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> agendamentoService.reagendar(7L, dados));
+
+                // 5. Confirma a mensagem de erro.
+                assertEquals(
+                                "Não é possível reagendar um atendimento cancelado.",
+                                excecao.getMessage());
+
+                // 6. Garante que o agendamento não seja salvo.
+                verify(agendamentoRepository, never()).save(any(Agendamento.class));
+        }
 
 }
