@@ -156,10 +156,32 @@ const API = (function () {
         const dados = await resposta.json().catch(() => null);
 
         if (!resposta.ok) {
+
             /*
-                O backend padroniza os erros através
-                do ErroResponseDTO: { status, erro, mensagem }.
-            */
+             * Trata uma sessão inválida ou expirada
+             * em requisições autenticadas.
+             *
+             * Áreas curriculares:
+             * - APIs REST
+             * - Segurança de Aplicações
+             * - Arquitetura de Software
+             */
+            if (resposta.status === 401 && autenticado) {
+
+                encerrarSessao();
+
+                window.location.replace("login.html?expirado=1");
+
+                throw new ErroApi(
+                    "Sua sessão expirou. Faça login novamente.",
+                    401
+                );
+            }
+
+            /*
+             * Mantém o tratamento padronizado
+             * dos demais erros retornados pela API.
+             */
             const mensagem =
                 (dados && dados.mensagem) ||
                 "Ocorreu um erro inesperado. Tente novamente.";

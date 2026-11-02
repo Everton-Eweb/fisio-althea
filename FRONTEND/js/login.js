@@ -7,11 +7,37 @@ const mensagemLogin = document.querySelector("#mensagemLogin");
 const botaoLogin = document.querySelector("#botaoLogin");
 
 /*
-    Se o usuário já estiver autenticado e acessar
-    esta página, mandamos direto para a área da conta.
-*/
-if (API.estaAutenticado()) {
-    window.location.href = "minha-conta.html";
+ * Verifica se o usuário chegou ao login após
+ * tentar acessar uma área sem permissão.
+ *
+ * Áreas curriculares:
+ * - Desenvolvimento Web
+ * - Segurança de Aplicações
+ */
+const parametrosUrl = new URLSearchParams(window.location.search);
+const acessoNegado = parametrosUrl.get("acesso") === "negado";
+
+if (acessoNegado) {
+
+    exibirMensagem(
+        "Você não possui permissão para acessar essa área. " +
+        "Entre com uma conta autorizada para continuar.",
+        "erro"
+    );
+
+} else if (API.estaAutenticado()) {
+
+    const usuario = API.obterUsuario();
+
+    const paginaDestino = usuario
+        ? obterPaginaPorPerfil(usuario.perfil)
+        : null;
+
+    if (paginaDestino) {
+        window.location.replace(paginaDestino);
+    } else {
+        API.encerrarSessao();
+    }
 }
 
 if (formularioLogin) {
@@ -44,15 +70,41 @@ if (formularioLogin) {
             });
 
             /*
-                Guarda o token JWT e os dados básicos
-                do usuário no localStorage.
+            * Identifica a página correspondente ao perfil
+            * retornado pelo backend.
+            *
+            * Áreas curriculares:
+            * - Desenvolvimento Web
+            * - APIs REST
+            * - Segurança de Aplicações
+            */
+            const paginaDestino = obterPaginaPorPerfil(resposta.perfil);
+
+            /*
+            * Impede a criação de uma sessão local
+            * quando o perfil não é reconhecido.
+            */
+            if (!paginaDestino) {
+                throw new Error(
+                    "Perfil de usuário não reconhecido. Entre em contato com a clínica."
+                );
+            }
+
+            /*
+            * Armazena o token JWT e os dados do usuário.
             */
             API.salvarSessao(resposta);
 
-            exibirMensagem("Login realizado com sucesso! Redirecionando...", "sucesso");
+            exibirMensagem(
+                "Login realizado com sucesso! Redirecionando...",
+                "sucesso"
+            );
 
+            /*
+            * Direciona o usuário para a área correspondente.
+            */
             setTimeout(function () {
-                window.location.href = "minha-conta.html";
+                window.location.href = paginaDestino;
             }, 900);
 
         } catch (erro) {
@@ -97,4 +149,33 @@ function exibirMensagem(texto, tipo) {
 function alternarCarregamento(carregando) {
     botaoLogin.disabled = carregando;
     botaoLogin.textContent = carregando ? "Entrando..." : "Entrar";
+}
+
+/*
+ * Define a página inicial de cada perfil.
+ *
+ * Áreas curriculares:
+ * - Desenvolvimento Web
+ * - Programação Orientada a Objetos
+ * - Segurança de Aplicações
+ */
+function obterPaginaPorPerfil(perfil) {
+
+    switch (perfil) {
+
+        case "PACIENTE":
+            return "minha-conta.html";
+
+        case "PROFISSIONAL":
+            return "area-profissional.html";
+
+        case "RECEPCIONISTA":
+            return "area-recepcao.html";
+
+        case "ADMINISTRADOR":
+            return "area-admin.html";
+
+        default:
+            return null;
+    }
 }
