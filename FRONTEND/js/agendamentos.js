@@ -40,9 +40,7 @@ let numeroConsulta = 0;         // ignora respostas antigas de horários
 let enviandoAgendamento = false; // Impede envios simultâneos
 let cancelamentosEmAndamento = new Set(); // Controla cancelamentos por ID
 
-if (!API.estaAutenticado()) {
-    window.location.href = "login.html?redirecionado=1";
-} else {
+if (ControleAcesso.protegerPagina("PACIENTE")) {
     iniciar();
 }
 
@@ -138,7 +136,10 @@ async function carregarHorarios() {
 
     try {
         const resposta = await API.requisitar(
-            "/disponibilidades/horarios?" + parametros.toString()
+            "/disponibilidades/horarios?" + parametros.toString(),
+            {
+                autenticado: true
+            }
         );
 
         if (consulta !== numeroConsulta) {
