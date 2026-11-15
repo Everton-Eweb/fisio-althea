@@ -7,11 +7,15 @@ const cardPaciente = document.querySelector("#cardPaciente");
 const botaoSair = document.querySelector("#botaoSair");
 
 /*
-    Página protegida: sem token, manda para o login.
-*/
-if (!API.estaAutenticado()) {
-    window.location.href = "login.html?redirecionado=1";
-} else {
+ * Verifica se o usuário está autenticado
+ * e possui o perfil PACIENTE.
+ *
+ * Áreas curriculares:
+ * - Desenvolvimento Web
+ * - Segurança de Aplicações
+ * - APIs REST
+ */
+if (ControleAcesso.protegerPagina("PACIENTE")) {
     carregarMeusDados();
 }
 
@@ -44,13 +48,19 @@ async function carregarMeusDados() {
 
     } catch (erro) {
 
+        /*
+         * HTTP 401:
+         * O api.js já encerra a sessão e redireciona
+         * o usuário para a página de login.
+         *
+         * Evitamos repetir o redirecionamento aqui.
+         *
+         * Áreas curriculares:
+         * - APIs REST
+         * - Segurança de Aplicações
+         * - Arquitetura de Software
+         */
         if (erro.status === 401) {
-            /*
-                Token ausente, inválido ou expirado:
-                encerra a sessão local e volta ao login.
-            */
-            API.encerrarSessao();
-            window.location.href = "login.html?expirado=1";
             return;
         }
 
