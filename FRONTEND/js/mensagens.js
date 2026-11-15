@@ -9,8 +9,7 @@ let pacienteAtual = null;
 let mensagemAtual = null;
 
 function iniciarAreaPaciente() {
-    if (!API.estaAutenticado()) {
-        window.location.href = "login.html?redirecionado=1";
+    if (!ControleAcesso.protegerPagina("PACIENTE")) {
         return;
     }
 
