@@ -16,12 +16,20 @@ const botaoLogin = document.querySelector("#botaoLogin");
  */
 const parametrosUrl = new URLSearchParams(window.location.search);
 const acessoNegado = parametrosUrl.get("acesso") === "negado";
+const sessaoExpirada = parametrosUrl.get("expirado") === "1";
 
 if (acessoNegado) {
 
     exibirMensagem(
         "Você não possui permissão para acessar essa área. " +
         "Entre com uma conta autorizada para continuar.",
+        "erro"
+    );
+
+} else if (sessaoExpirada) {
+
+    exibirMensagem(
+        "Sua sessão expirou. Por segurança, entre novamente para continuar.",
         "erro"
     );
 
