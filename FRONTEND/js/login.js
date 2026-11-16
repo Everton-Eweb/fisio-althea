@@ -18,6 +18,19 @@ const parametrosUrl = new URLSearchParams(window.location.search);
 const acessoNegado = parametrosUrl.get("acesso") === "negado";
 const sessaoExpirada = parametrosUrl.get("expirado") === "1";
 
+// Permite trocar de conta após um acesso negado.
+const opcaoTrocarConta = document.querySelector("#opcaoTrocarConta");
+const botaoTrocarConta = document.querySelector("#botaoTrocarConta");
+
+if (acessoNegado && API.estaAutenticado() && opcaoTrocarConta && botaoTrocarConta) {
+    opcaoTrocarConta.classList.remove("d-none");
+
+    botaoTrocarConta.addEventListener("click", function () {
+        API.encerrarSessao();
+        window.location.replace("login.html");
+    });
+}
+
 if (acessoNegado) {
 
     exibirMensagem(
