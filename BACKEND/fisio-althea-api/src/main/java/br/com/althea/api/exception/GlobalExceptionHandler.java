@@ -40,6 +40,28 @@ public class GlobalExceptionHandler {
          * - conflito de horário;
          * - horário indisponível.
          */
+
+         /*
+     * Trata tentativas de acesso a recursos
+     * sem a permissão necessária.
+     */
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<ErroResponseDTO> tratarAcessoNegado(
+            AcessoNegadoException exception) {
+
+        HttpStatus status = HttpStatus.FORBIDDEN;
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                LocalDateTime.now(),
+                status.value(),
+                status.getReasonPhrase(),
+                exception.getMessage());
+
+        return ResponseEntity
+                .status(status)
+                .body(erro);
+    }
+
         @ExceptionHandler(IllegalArgumentException.class)
         public ResponseEntity<ErroResponseDTO> tratarIllegalArgument(
                         IllegalArgumentException exception) {
@@ -63,7 +85,7 @@ public class GlobalExceptionHandler {
          *
          * Essa exceção ocorre quando algum campo
          * não atende às regras definidas com
-         * 
+         *
          * @NotNull, @NotBlank, @Email, @Size etc.
          */
         @ExceptionHandler(MethodArgumentNotValidException.class)
